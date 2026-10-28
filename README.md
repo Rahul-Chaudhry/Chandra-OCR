@@ -20,7 +20,7 @@ The exporter flattens multi-level table headers before writing Excel. That avoid
 
 The quickest route is the ready-to-run notebook at
 [`notebooks/batch_convert_to_excel.ipynb`](notebooks/batch_convert_to_excel.ipynb). It
-processes every PDF, JPG, and JPEG in the project folder and creates one
+processes every PDF, JPG, and JPEG in the `input_files` folder and creates one
 `*_tables.xlsx` workbook for each input file.
 
 Open Terminal and run these commands once:
@@ -43,7 +43,7 @@ On Windows PowerShell, activate the environment with:
 
 Then, in the browser window that opens:
 
-1. Put your PDF, JPG, or JPEG files in the `Chandra-OCR` project folder.
+1. Put your PDF, JPG, or JPEG files in the `Chandra-OCR/input_files` folder.
 2. Open `notebooks/batch_convert_to_excel.ipynb`.
 3. Paste your Datalab key into the `API_KEY` line in the settings cell. Keep that local change out of Git.
 4. Select **Run All Cells**.
@@ -131,6 +131,7 @@ src/datalab_table_exporter/
   cli.py        # datalab-tables command
 notebooks/
   batch_convert_to_excel.ipynb  # Batch PDF/JPG/JPEG conversion in Jupyter
+input_files/  # Put PDF, JPG, and JPEG files here before running the notebook
 requirements.txt  # Jupyter notebook dependencies
 tests/
   test_converter.py
