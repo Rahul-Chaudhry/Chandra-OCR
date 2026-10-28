@@ -37,7 +37,7 @@ becomes a `Table_1`, `Table_2`, and so on worksheet.
 Install the command-line package when you prefer Terminal over Jupyter:
 
 ```bash
-python -m pip install -e ".[dev]"
+python -m pip install -e .
 export DATALAB_API_KEY="your_api_key"
 datalab-tables data/scan.jpeg --output outputs/scan_tables.xlsx
 ```
@@ -58,14 +58,7 @@ data/          # Add source PDFs and images here
 outputs/       # Generated Excel workbooks (ignored by Git)
 notebooks/     # Beginner-friendly Jupyter workflow
 src/           # Reusable converter and command-line package
-tests/         # Automated tests
 requirements.txt
-```
-
-## Test
-
-```bash
-python -m pytest
 ```
 
 ## Notes
