@@ -1,29 +1,9 @@
 # Chandra OCR
 
-Convert a PDF, JPG, or JPEG with Datalab and save each detected table to a separate worksheet in an Excel workbook.
+Convert PDFs, JPGs, and JPEGs with Datalab, then export every detected table to
+its own worksheet in an Excel workbook.
 
-The project keeps the workflow intentionally small:
-
-1. Upload one supported file to Datalab's Convert API.
-2. Poll the job until it finishes.
-3. Read the HTML returned for every table block.
-4. Export each table to a `Table_1`, `Table_2`, … worksheet.
-
-The exporter flattens multi-level table headers before writing Excel. That avoids pandas' `NotImplementedError` for MultiIndex columns when `index=False`.
-
-## Requirements
-
-- Python 3.10 or newer
-- A Datalab API key
-
-## Run the notebook (beginner setup)
-
-The quickest route is the ready-to-run notebook at
-[`notebooks/batch_convert_to_excel.ipynb`](notebooks/batch_convert_to_excel.ipynb). It
-processes every PDF, JPG, and JPEG in the `input_files` folder and creates one
-`*_tables.xlsx` workbook for each input file.
-
-Open Terminal and run these commands once:
+## Quick start
 
 ```bash
 git clone https://github.com/Rahul-Chaudhry/Chandra-OCR.git
@@ -41,104 +21,59 @@ On Windows PowerShell, activate the environment with:
 .venv\Scripts\Activate.ps1
 ```
 
-Then, in the browser window that opens:
+## Notebook workflow
 
-1. Put your PDF, JPG, or JPEG files in the `Chandra-OCR/input_files` folder.
-2. Open `notebooks/batch_convert_to_excel.ipynb`.
-3. Paste your Datalab key into the `API_KEY` line in the settings cell. Keep that local change out of Git.
+1. Put PDFs, JPGs, or JPEGs in `data/`.
+2. Open `notebooks/batch_convert_to_excel.ipynb` in JupyterLab.
+3. Add your Datalab API key to `API_KEY`, or set `DATALAB_API_KEY` in Terminal.
 4. Select **Run All Cells**.
 
-The `requirements.txt` file installs JupyterLab and every library the notebook
-needs: pandas, requests, lxml, and openpyxl. The notebook filters its folder to
-supported input types, so it will not try to upload itself, the README, or the
-Excel workbooks it creates.
+The notebook processes every supported file in `data/` and saves a separate
+`*_tables.xlsx` workbook for each input in `outputs/`. Each detected table
+becomes a `Table_1`, `Table_2`, and so on worksheet.
 
-## Install
+## Command-line workflow
+
+Install the command-line package when you prefer Terminal over Jupyter:
 
 ```bash
-git clone https://github.com/Rahul-Chaudhry/Chandra-OCR.git
-cd Chandra-OCR
-python -m venv .venv
-source .venv/bin/activate
 python -m pip install -e ".[dev]"
-```
-
-On Windows PowerShell, activate the virtual environment with:
-
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-## Set your API key
-
-macOS/Linux:
-
-```bash
 export DATALAB_API_KEY="your_api_key"
+datalab-tables data/scan.jpeg --output outputs/scan_tables.xlsx
 ```
 
-Windows PowerShell:
+On Windows PowerShell:
 
 ```powershell
 $env:DATALAB_API_KEY = "your_api_key"
 ```
 
-The key is read from the environment by default. You can instead pass `--api-key` for a one-off run, but environment variables avoid putting the key into shell history or source files.
-
-## Convert a file
-
-```bash
-datalab-tables "1913 Tunisie-15.pdf"
-```
-
-This writes `1913 Tunisie-15_tables.xlsx` beside the input file.
-
-Choose an output path, processing mode, or polling interval when needed:
-
-```bash
-datalab-tables scan.jpeg \
-  --output exports/scan_tables.xlsx \
-  --mode accurate \
-  --poll-seconds 5
-```
-
-Supported input extensions are `.pdf`, `.jpg`, and `.jpeg`.
-
-## Use from a notebook or another Python script
-
-```python
-from datalab_table_exporter import convert_to_excel
-
-output = convert_to_excel(
-    "1913 Tunisie-15.pdf",
-    api_key="your_api_key",
-)
-
-print(output)
-```
-
-## Run tests
-
-```bash
-pytest
-```
+Use `--mode accurate` or `--poll-seconds 5` when needed. Supported inputs are
+`.pdf`, `.jpg`, and `.jpeg`.
 
 ## Project layout
 
 ```text
-src/datalab_table_exporter/
-  converter.py  # Datalab upload, polling, parsing, and Excel export
-  cli.py        # datalab-tables command
-notebooks/
-  batch_convert_to_excel.ipynb  # Batch PDF/JPG/JPEG conversion in Jupyter
-input_files/  # Put PDF, JPG, and JPEG files here before running the notebook
-requirements.txt  # Jupyter notebook dependencies
-tests/
-  test_converter.py
+data/          # Add source PDFs and images here
+outputs/       # Generated Excel workbooks (ignored by Git)
+notebooks/     # Beginner-friendly Jupyter workflow
+src/           # Reusable converter and command-line package
+tests/         # Automated tests
+requirements.txt
+```
+
+## Test
+
+```bash
+python -m pytest
 ```
 
 ## Notes
 
-- The project does not save Datalab's raw JSON response. The result stays in memory only long enough to create the Excel workbook.
-- A failed Datalab job raises an error instead of waiting forever.
-- The Datalab Convert API supports document and image conversion; its current reference describes PDF and image uploads and the `accurate` processing mode used here. See the [Datalab Convert API reference](https://documentation.datalab.to/api-reference/convert-document).
+- Keep API keys local; `.env` is ignored by Git.
+- The exporter flattens multi-level headers before writing Excel, avoiding
+  pandas' MultiIndex `index=False` limitation.
+- The raw Datalab JSON result stays in memory and is not written to disk.
+
+See the [Datalab Convert API reference](https://documentation.datalab.to/api-reference/convert-document)
+for details about the upstream conversion service.
