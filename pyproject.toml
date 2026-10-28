@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "datalab-table-exporter"
+version = "0.1.0"
+description = "Convert a PDF or JPEG with Datalab and export detected tables to Excel."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "lxml>=5.0",
+  "openpyxl>=3.1",
+  "pandas>=2.0",
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+datalab-tables = "datalab_table_exporter.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.setuptools.packages.find]
+where = ["src"]
