@@ -16,6 +16,43 @@ The exporter flattens multi-level table headers before writing Excel. That avoid
 - Python 3.10 or newer
 - A Datalab API key
 
+## Run the notebook (beginner setup)
+
+The quickest route is the ready-to-run notebook at
+[`notebooks/batch_convert_to_excel.ipynb`](notebooks/batch_convert_to_excel.ipynb). It
+processes every PDF, JPG, and JPEG in the project folder and creates one
+`*_tables.xlsx` workbook for each input file.
+
+Open Terminal and run these commands once:
+
+```bash
+git clone https://github.com/Rahul-Chaudhry/Chandra-OCR.git
+cd Chandra-OCR
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+jupyter lab
+```
+
+On Windows PowerShell, activate the environment with:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Then, in the browser window that opens:
+
+1. Put your PDF, JPG, or JPEG files in the `Chandra-OCR` project folder.
+2. Open `notebooks/batch_convert_to_excel.ipynb`.
+3. Paste your Datalab key into the `API_KEY` line in the settings cell. Keep that local change out of Git.
+4. Select **Run All Cells**.
+
+The `requirements.txt` file installs JupyterLab and every library the notebook
+needs: pandas, requests, lxml, and openpyxl. The notebook filters its folder to
+supported input types, so it will not try to upload itself, the README, or the
+Excel workbooks it creates.
+
 ## Install
 
 ```bash
@@ -23,7 +60,7 @@ git clone https://github.com/Rahul-Chaudhry/Chandra-OCR.git
 cd Chandra-OCR
 python -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
+python -m pip install -e ".[dev]"
 ```
 
 On Windows PowerShell, activate the virtual environment with:
@@ -92,6 +129,9 @@ pytest
 src/datalab_table_exporter/
   converter.py  # Datalab upload, polling, parsing, and Excel export
   cli.py        # datalab-tables command
+notebooks/
+  batch_convert_to_excel.ipynb  # Batch PDF/JPG/JPEG conversion in Jupyter
+requirements.txt  # Jupyter notebook dependencies
 tests/
   test_converter.py
 ```
