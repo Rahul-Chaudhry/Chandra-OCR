@@ -58,6 +58,7 @@ data/          # Add source PDFs and images here
 outputs/       # Generated Excel workbooks (ignored by Git)
 notebooks/     # Beginner-friendly Jupyter workflow
 src/           # Reusable converter and command-line package
+documentation/ # Project documentation and references
 requirements.txt
 ```
 
