@@ -1,4 +1,4 @@
-# Datalab table exporter
+# Chandra OCR
 
 Convert a PDF, JPG, or JPEG with Datalab and save each detected table to a separate worksheet in an Excel workbook.
 
@@ -19,8 +19,8 @@ The exporter flattens multi-level table headers before writing Excel. That avoid
 ## Install
 
 ```bash
-git clone <your-repository-url>
-cd datalab-table-exporter
+git clone https://github.com/Rahul-Chaudhry/Chandra-OCR.git
+cd Chandra-OCR
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
